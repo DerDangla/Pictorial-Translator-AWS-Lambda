@@ -3,10 +3,10 @@ A pictorial translator application using AWS services: s3 bucket, polly, transla
 
 
 ## AI Framework
-![image](https://github.com/DerDangla/Pictorial-Translator-AWS-Lambda/assets/8519156/e79ade8e-dffe-4fb5-91c6-31499641390b)
+![image](https://github.com/DerDangla/Pictorial-Translator-AWS-Lambda/assets/8519156/cbbc27e0-17a0-4733-b82d-2ce69a89cecb)
 
 ## Communication / Sequence Diagram
-![image](https://github.com/DerDangla/Pictorial-Translator-AWS-Lambda/assets/8519156/64a02679-95f7-4835-8752-56ca590f591a)
+![image](https://github.com/DerDangla/Pictorial-Translator-AWS-Lambda/assets/8519156/16fa020f-f9c5-4441-a299-254571287204)
 
 ## Samples
 ### Image sample
