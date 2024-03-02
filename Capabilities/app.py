@@ -17,7 +17,7 @@ app.debug = True
 #####
 # services initialization
 #####
-storage_location = 'contentxxxx.aws.ai'
+storage_location = 'xxxxx.aws.ai'
 storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
@@ -70,4 +70,6 @@ def create_speech():
     request_data = json.loads(app.current_request.raw_body)
     combined_translated_text = request_data['combined_translated_text']
     # Emander Changes: call the service to synthesize the speech, parameter is to join the array of translated text into a single string
-    polly_service.synthesize_speech(' '.join(combined_translated_text))
+    output_file = polly_service.synthesize_speech(' '.join(combined_translated_text))
+    
+    return {"outputFile": output_file}

@@ -15,7 +15,7 @@ class PollyService:
 
         # Save the audio to a file
         with closing(response['AudioStream']) as stream:
-            output_file = f"translated_speech_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{output_format}"
+            output_file = f'audio_files/translated_speech_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{output_format}'
             with open(output_file, 'wb') as file:
                 file.write(stream.read())
         

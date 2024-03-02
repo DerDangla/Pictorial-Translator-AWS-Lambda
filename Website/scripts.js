@@ -99,11 +99,16 @@ function createSpeech(combined_translated_text) {
         body: JSON.stringify({combined_translated_text: combined_translated_text})
     }).then(response => {
         if (response.ok) {
-            // Emander Changes: Display the audio result
-            document.getElementById("audio_result").style.display = "block";
+            return response.json();
         } else {
             throw new HttpError(response);
         }
+    }).then(data => {
+        document.getElementById("audio_source").src = "../Capabilities/" + data.outputFile;
+        // Emander Changes: Display the audio result
+        document.getElementById("audio_result").style.display = "block";
+        document.getElementById("audio_player").load();
+        document.getElementById("audio_player").play();
     })
 }
 

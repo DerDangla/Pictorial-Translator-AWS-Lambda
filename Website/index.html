@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"/>
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>
@@ -7,46 +7,54 @@
 
     <title>Pictorial Translator</title>
 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 </head>
 
-<body class="w3-theme-14">
-    <div style="min-width:400px">
-        <div class="w3-bar w3-large w3-theme-d4">
-            <span class="w3-bar-item">Pictorial Translator</span>
+<body>
+    <div class="container" style="min-width:400px">
+        <div class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <span class="navbar-brand mb-0 h1">Pictorial Translator</span>
         </div>
 
-        <div class="w3-container w3-content">
-            <p class="w3-opacity"><b>Upload</b></p>
+        <div class="mt-3">
+            <p><b>Upload</b></p>
             <input id="file" type="file" name="file" accept="image/*"/>
-            <input class="w3-button w3-blue-grey" type="submit" value="Upload"
-                   onclick="uploadAndTranslate()"/>
+            <button class="btn btn-primary" onclick="uploadAndTranslate()">Upload</button>
+        </div>
 
-            <p class="w3-opacity"><b>Image</b></p>
-            <div id="view" class="w3-panel w3-white w3-card w3-display-container"
-                 style="display:none;">
-                <div style="float: left;">
-                    <img id="image" width="600"/>
-                </div>
-                <div style="float: right;">
-                    <h5>Translated Text:</h5>
-                    <div id="translations"/>
-                </div>
-                <!-- Emander Changes: Added a div that will contain the translated audio label and audio control -->
-                <div style="float: right; display: none" id="audio_result">
-                    <h5>Translated Audio:</h5>
-                    <audio controls>
-                        <source id="audio_source" src="../Capabilities/translated_speech.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
+        <div class="mt-3">
+            <p><b>Image</b></p>
+            <div id="view" class="card" style="display:none;">
+                <div class="row no-gutters">
+                    <div class="col-md-6">
+                        <img id="image" class="img-fluid" /> 
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">Translated Text:</h5>
+                            <div id="translations" class="card-text"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="audio_result" style="display: none">
+                        <div class="card-body">
+                            <h5 class="card-title">Translated Audio:</h5>
+                            <audio id="audio_player" controls>
+                                <source id="audio_source" src="" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script src="scripts.js"></script>
 </body>
-
 </html>
