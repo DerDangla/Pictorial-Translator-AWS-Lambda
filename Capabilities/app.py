@@ -5,6 +5,8 @@ import base64
 
 app = Flask(__name__)
 
+CORS(app)
+
 # Initialize services
 storage_location = 'pic-translate-store'
 storage_service = storage_service.StorageService(storage_location)
@@ -19,7 +21,7 @@ def validate_api():
     return jsonify({"status": "success", "message": "API is running successfully!"})
 
 # Upload image endpoint
-@app.route('/images', methods=['POST'], cors=True)
+@app.route('/images', methods=['POST'])
 def upload_image():
     """Processes file upload and saves file to storage service"""
     data = request.get_json()
@@ -30,7 +32,7 @@ def upload_image():
     return jsonify(image_info)
 
 # Translate text in image
-@app.route('/images/<image_id>/translate-text', methods=['POST'], cors=True)
+@app.route('/images/<image_id>/translate-text', methods=['POST'])
 def translate_image_text(image_id):
     """Detects then translates text in the specified image"""
     data = request.get_json()
@@ -53,7 +55,7 @@ def translate_image_text(image_id):
     return jsonify(translated_lines)
 
 # Text-to-speech endpoint
-@app.route('/text-to-speech', methods=['POST'], cors=True)
+@app.route('/text-to-speech', methods=['POST'])
 def create_speech():
     """Converts text to speech and saves the audio"""
     data = request.get_json()
