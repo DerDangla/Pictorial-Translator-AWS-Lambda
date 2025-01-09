@@ -1,6 +1,6 @@
 "use strict";
 
-const serverUrl = "http://3.99.33.203:8000";
+const serverUrl = "http://99.79.65.130:8000";
 
 async function uploadImage() {
     // encode input file as base64 string for upload

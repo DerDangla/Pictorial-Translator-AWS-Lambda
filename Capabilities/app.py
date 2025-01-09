@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from chalicelib import storage_service, recognition_service, translation_service, polly_service
 import base64
 
