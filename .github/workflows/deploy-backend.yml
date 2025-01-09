@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "Capabilities/**"
+      - ".github/workflows/deploy-backend.yml"
   workflow_dispatch:
 
 env:
