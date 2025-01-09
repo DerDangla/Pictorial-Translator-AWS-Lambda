@@ -13,13 +13,13 @@ translation_service = translation_service.TranslationService()
 polly_service = polly_service.PollyService()
 
 # Health check endpoint
-@app.route('/validate', methods=['GET'])
+@app.route('/validate', methods=['GET'], cors=True)
 def validate_api():
     """Simple endpoint to validate that the API is running."""
     return jsonify({"status": "success", "message": "API is running successfully!"})
 
 # Upload image endpoint
-@app.route('/images', methods=['POST'])
+@app.route('/images', methods=['POST'], cors=True)
 def upload_image():
     """Processes file upload and saves file to storage service"""
     data = request.get_json()
@@ -30,7 +30,7 @@ def upload_image():
     return jsonify(image_info)
 
 # Translate text in image
-@app.route('/images/<image_id>/translate-text', methods=['POST'])
+@app.route('/images/<image_id>/translate-text', methods=['POST'], cors=True)
 def translate_image_text(image_id):
     """Detects then translates text in the specified image"""
     data = request.get_json()
@@ -53,7 +53,7 @@ def translate_image_text(image_id):
     return jsonify(translated_lines)
 
 # Text-to-speech endpoint
-@app.route('/text-to-speech', methods=['POST'])
+@app.route('/text-to-speech', methods=['POST'], cors=True)
 def create_speech():
     """Converts text to speech and saves the audio"""
     data = request.get_json()
