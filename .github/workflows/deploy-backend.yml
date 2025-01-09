@@ -1,0 +1,102 @@
+name: Deploy Backend to Fargate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Capabilities/**"
+  workflow_dispatch:
+
+env:
+  ECR_REPOSITORY: pic-translate-backend-repo
+  AWS_ACCOUNT_ID: 730335337132
+  AWS_REGION: ca-central-1
+  CLUSTER_NAME: pic-translate-backend-cluster
+  SERVICE_NAME: pic-translate-backend-service
+  TASK_DEFINITION: pic-translate-backend-task
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install jq for JSON manipulation
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
+      # Configure AWS credentials with OIDC
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::730335337132:role/emander-gh-role
+          aws-region: ca-central-1
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Build, tag, and push the Docker image to ECR
+      - name: Build and push Docker image
+        run: |
+          IMAGE_TAG="LATEST"
+          cd Capabilities
+          docker build -t ${ECR_REPOSITORY}:$IMAGE_TAG .
+          docker tag ${ECR_REPOSITORY}:$IMAGE_TAG ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:$IMAGE_TAG
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:$IMAGE_TAG
+
+      # Update the ECS Fargate service to use the new Docker image
+      - name: Deploy to ECS Fargate
+        run: |
+          IMAGE_TAG="LATEST"
+          IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:$IMAGE_TAG"
+
+          echo "New Image URI: $IMAGE_URI"
+
+          # Get the existing task definition JSON
+          TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition ${TASK_DEFINITION})
+
+          # Replace the image in the container definition
+          NEW_CONTAINER_DEFINITIONS=$(echo $TASK_DEFINITION | jq --arg IMAGE "$IMAGE_URI" '.taskDefinition.containerDefinitions | .[0].image = $IMAGE')
+
+          # Extract additional task definition attributes
+          FAMILY=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.family')
+          CPU=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.cpu')
+          MEMORY=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.memory')
+          NETWORK_MODE=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.networkMode')
+          REQUIRES_COMPAT=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.requiresCompatibilities[]')
+          EXECUTION_ROLE_ARN="arn:aws:iam::730335337132:role/apprentice-sbx-glbl-admin-role"
+          TASK_ROLE_ARN="arn:aws:iam::730335337132:role/apprentice-sbx-glbl-admin-role"
+
+          # Register a new task definition revision
+          aws ecs register-task-definition \
+            --family $FAMILY \
+            --task-role-arn $TASK_ROLE_ARN \
+            --execution-role-arn $EXECUTION_ROLE_ARN \
+            --cpu $CPU \
+            --memory $MEMORY \
+            --network-mode $NETWORK_MODE \
+            --requires-compatibilities $REQUIRES_COMPAT \
+            --container-definitions "$NEW_CONTAINER_DEFINITIONS"
+
+          # Capture the newly registered task definition revision ARN
+          NEW_TASK_DEFINITION_ARN=$(aws ecs describe-task-definition --task-definition $FAMILY | jq -r '.taskDefinition.taskDefinitionArn')
+
+          # Update the ECS service with the new task definition
+          aws ecs update-service \
+            --cluster ${CLUSTER_NAME} \
+            --service ${SERVICE_NAME} \
+            --force-new-deployment \
+            --task-definition $NEW_TASK_DEFINITION_ARN
