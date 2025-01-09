@@ -101,3 +101,16 @@ jobs:
             --service ${SERVICE_NAME} \
             --force-new-deployment \
             --task-definition $NEW_TASK_DEFINITION_ARN
+
+      # Validate the API
+      - name: Validate API
+        run: |
+          API_URL="http://pic-translator-nlb-b5c2f5365796bfd4.elb.ca-central-1.amazonaws.com/validate"
+          RESPONSE=$(curl --write-out "%{http_code}" --silent --output /dev/null $API_URL)
+
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "API Validation Successful"
+          else
+            echo "API Validation Failed with status code: $RESPONSE"
+            exit 1
+          fi
