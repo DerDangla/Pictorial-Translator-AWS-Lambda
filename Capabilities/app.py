@@ -13,7 +13,7 @@ translation_service = translation_service.TranslationService()
 polly_service = polly_service.PollyService()
 
 # Health check endpoint
-@app.route('/validate', methods=['GET'], cors=True)
+@app.route('/validate', methods=['GET'])
 def validate_api():
     """Simple endpoint to validate that the API is running."""
     return jsonify({"status": "success", "message": "API is running successfully!"})
