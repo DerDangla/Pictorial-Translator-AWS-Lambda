@@ -17,7 +17,7 @@ app.debug = True
 #####
 # services initialization
 #####
-storage_location = 'xxxxx.aws.ai'
+storage_location = 'pic-translate-store'
 storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
@@ -27,6 +27,12 @@ polly_service = polly_service.PollyService()
 #####
 # RESTful endpoints
 #####
+
+@app.route('/validate', methods=['GET'], cors=True)
+def validate_api():
+    """Simple endpoint to validate that the API is running."""
+    return {"status": "success", "message": "API is running successfully!"}
+
 @app.route('/images', methods = ['POST'], cors = True)
 def upload_image():
     """processes file upload and saves file to storage service"""
