@@ -1,6 +1,5 @@
-Flask==2.0.1
-boto3==1.18.46
-chalice==1.28.1
+chalice==1.28.0
 boto3==1.28.5
-Werkzeug==2.0.1
+Flask==2.0.1
 Flask-Cors==3.0.10
+Werkzeug==2.0.1
