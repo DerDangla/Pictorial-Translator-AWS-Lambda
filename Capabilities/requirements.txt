@@ -1,5 +1,5 @@
 chalice==1.28.0
+flask==2.2.3
 boto3==1.28.5
-Flask==2.0.1
 Flask-Cors==3.0.10
 Werkzeug==2.0.1

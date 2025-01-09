@@ -4,11 +4,14 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the application files
+# Copy application files
 COPY . .
 
-# Install Python dependencies
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set the command to run the Chalice app
-CMD ["chalice", "local"]
+# Expose the port
+EXPOSE 8000
+
+# Run the application
+CMD ["python", "app.py"]
