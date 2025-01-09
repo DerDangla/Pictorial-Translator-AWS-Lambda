@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 CORS(app)
 
-# Initialize services
+# Initialize servicess
 storage_location = 'pic-translate-store'
 storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
