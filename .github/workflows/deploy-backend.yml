@@ -77,8 +77,8 @@ jobs:
           MEMORY=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.memory')
           NETWORK_MODE=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.networkMode')
           REQUIRES_COMPAT=$(echo $TASK_DEFINITION | jq -r '.taskDefinition.requiresCompatibilities[]')
-          EXECUTION_ROLE_ARN="arn:aws:iam::730335337132:role/apprentice-sbx-glbl-admin-role"
-          TASK_ROLE_ARN="arn:aws:iam::730335337132:role/apprentice-sbx-glbl-admin-role"
+          EXECUTION_ROLE_ARN="arn:aws:iam::730335337132:role/emander-task-role"
+          TASK_ROLE_ARN="arn:aws:iam::730335337132:role/emander-task-role"
 
           # Register a new task definition revision
           aws ecs register-task-definition \
